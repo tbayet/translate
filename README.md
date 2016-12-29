@@ -1,4 +1,4 @@
-# Translate
+# Translate (maquette)
   Plateforme web pour la gestion de projet traduction en temps réel (Node.js) de sous-titres. 
   Décompose le fichier SRT en blocs à traduire, permet une traduction en equipe synchronisée et réactive, puis exporte le nouveau fichier SRT.
  
