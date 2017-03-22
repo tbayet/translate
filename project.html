@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<header>
+	<h1>$user['name'] - $project['name']</h1>
+</header>
+<div id="page">
+	<div ng-app="myApp" id="content">
+		<div class="element" ng-repeat="sub in srt" ng-controller="srtCtrl">
+			<div class="number">{{sub[0]}}</div>
+			<h4></h4>
+			<p ng-repeat="line in sub">
+				<p></p>
+				<input type="text" class="trad" disabled></input>
+				<input type="text" class="result"></input>
+			</p>
+		</div>
+	</div>
+</div>
+<footer>
+	<a href="http://translate.yandex.com/" target="_blank">Powered by Yandex.Translate</a>
+</footer>
+
+<script>
+
+	var app = angular.module('myApp', []);
+
+	app.controller('srtCtrl', function($scope, $http) {
+		$http.get('project.json')
+		.then(function(res){
+			$scope.srt = res.data;
+		});
+	});
+
+/*
+	var	srt_ar = 
+	var	i = 0;
+	var j;
+	var div, para, para2, title, input, inputtrad, entete;
+	var content = document.getElementById("content");
+	var p_text;
+
+	//document.write(srt_ar.toString());
+	while (srt_ar[i])
+	{
+		while (srt_ar[i][j])
+		{
+			//---->translateText(srt_ar[i][j], "fr", inputtrad);
+		}
+		i++;
+	}
+	*/
+	function translateText(textAPI, langAPI, inputtrad)
+	{
+		var keyAPI = "trnsl.1.1.20161229T041736Z.65dd058529799b6b.cd475f6e9c57bd9632ed3b86bcca91c9fff3b0db";
+		var url = "https://translate.yandex.net/api/v1.5/tr.json/translate";
+
+		var xhr = new XMLHttpRequest();
+		var data = "key="+keyAPI+"&text="+textAPI+"&lang="+langAPI;
+
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhr.send(data);
+		xhr.onreadystatechange = function() {
+			if (this.readyState==4 && this.status==200) {
+				var res = this.responseText;
+				var json = JSON.parse(res);
+				if (json.code == 200) {
+					inputtrad.value = json.text[0];
+					inputtrad.size = (json.text[0].length).toString();
+				}
+				else {
+					inputtrad.value = "Error Code: " + json.code;
+				}
+			}
+		}
+	}
+</script>
+
+</body>
+</html>
