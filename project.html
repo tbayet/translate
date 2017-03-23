@@ -11,18 +11,15 @@
 </header>
 <div id="page">
 	<div ng-app="myApp" id="content" ng-controller="srtCtrl">
-	<div ng-repeat="n in srt">
-		<p>  DFGFGDFGSHSGHSHFEHDGHDFgh</p>
-	</div>
-<!--	<div class="element" ng-repeat="sub in srt">
-			<div class="number">{{sub[0]}}</div>
-			<h4>ha</h4>
-			<p ng-repeat="line in sub">
-				<p></p>
-				<input type="text" class="trad" disabled></input>
-				<input type="text" class="result"></input>
-			</p>
-		</div> -->
+	<div class="element" ng-repeat="(timer, subs) in srt">
+		<div class="number">{{$index + 1}}</div>
+			<h4>{{timer}}</h4>
+			<div ng-repeat="sub in subs">
+				<p>{{sub}}</p>
+				<input type="text" class="trad" value="{{sub | translateText}}" disabled />
+				<input type="text" class="result" />
+			</div>
+		</div>
 	</div>
 </div>
 <footer>
@@ -32,57 +29,57 @@
 <script>
 	var app = angular.module('myApp', []);
 
+	app.filter('translateText', function ($http) {
+	function testt(srt)
+	{
+		$http({
+				method : "POST",
+				url : "https://translate.yandex.net/api/v1.5/tr.json/translate?lang=fr&key=trnsl.1.1.20161229T041736Z.65dd058529799b6b.cd475f6e9c57bd9632ed3b86bcca91c9fff3b0db&text=Hello"
+			}).then(function mySucces(response) {
+				myWelcome = response.data;
+				console.log(myWelcome.text[0]);
+				return (myWelcome.text[0]);
+			}, function myError(response) {
+				myWelcome = response.statusText;
+			});
+		};
+			/*
+			var langAPI = 'fr';
+			var keyAPI = "trnsl.1.1.20161229T041736Z.65dd058529799b6b.cd475f6e9c57bd9632ed3b86bcca91c9fff3b0db";
+			var url = "https://translate.yandex.net/api/v1.5/tr.json/translate";
+			var xhr = new XMLHttpRequest();
+			var data = "key="+keyAPI+"&text="+sub+"&lang="+langAPI;
+			var translated = "yolo";
+
+			xhr.open("POST", url, true);
+			xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			xhr.send(data);
+			function resultReq () {
+				if (this.readyState==4 && this.status==200) {
+					var res = this.responseText;
+					var json = JSON.parse(res);
+					if (json.code == 200)
+						translated = json.text[0];
+					else
+						translated = "Error Code: " + json.code;
+				}
+				else
+				{
+					translated = "lol";
+					(this.onreadystatechange = resultReq).$stateful = true;
+				}
+				console.log(translated);
+			}
+			(xhr.onreadystatechange = resultReq).$stateful = true;
+			return (translated);*/
+	});
+
 	app.controller('srtCtrl', function($scope, $http) {
-		$http.get('db/project.json')
+		$http.get('./db/project.json')
 		.then(function(response){
 			$scope.srt = response.data;
 		});
 	});
-
-/*
-	var	srt_ar = 
-	var	i = 0;
-	var j;
-	var div, para, para2, title, input, inputtrad, entete;
-	var content = document.getElementById("content");
-	var p_text;
-
-	//document.write(srt_ar.toString());
-	while (srt_ar[i])
-	{
-		while (srt_ar[i][j])
-		{
-			//---->translateText(srt_ar[i][j], "fr", inputtrad);
-		}
-		i++;
-	}
-	*/
-/*	function translateText(textAPI, langAPI, inputtrad)
-	{
-		var keyAPI = "trnsl.1.1.20161229T041736Z.65dd058529799b6b.cd475f6e9c57bd9632ed3b86bcca91c9fff3b0db";
-		var url = "https://translate.yandex.net/api/v1.5/tr.json/translate";
-
-		var xhr = new XMLHttpRequest();
-		var data = "key="+keyAPI+"&text="+textAPI+"&lang="+langAPI;
-
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-		xhr.send(data);
-		xhr.onreadystatechange = function() {
-			if (this.readyState==4 && this.status==200) {
-				var res = this.responseText;
-				var json = JSON.parse(res);
-				if (json.code == 200) {
-					inputtrad.value = json.text[0];
-					inputtrad.size = (json.text[0].length).toString();
-				}
-				else {
-					inputtrad.value = "Error Code: " + json.code;
-				}
-			}
-		}
-	}*/
 </script>
-
 </body>
 </html>

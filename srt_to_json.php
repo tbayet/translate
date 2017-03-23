@@ -10,13 +10,13 @@
 		$nb = substr($nb, 0, strlen($nb) - 2);
 		if (is_numeric($nb))
 		{
-			$nb = intval($nb) - 1;
+		//	$nb = intval($nb) - 1;
 			$i = 0;
-			$srt_ar[$nb] = array();
+		//	$srt_ar[$nb] = array();
 			$buff = fgets($file);
-			$srt_ar[$nb][$i++] = substr($buff, 0, strlen($buff) - 2);
+			$key = substr($buff, 0, strlen($buff) - 2);
 			while(($buff = fgets($file)) && strcmp($buff, "\r\n") !== 0)
-				$srt_ar[$nb][$i++] = utf8_encode(substr($buff, 0, strlen($buff) - 2));
+				$srt_ar[$key][$i++] = utf8_encode(substr($buff, 0, strlen($buff) - 2));
 		}
 	}
 	$JSONfile = fopen("db/project.json", "w+");

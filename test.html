@@ -11,7 +11,7 @@
 	var app = angular.module('myApp', []);
 
 	app.controller('srtCtrl', function($scope, $http) {
-		$http.get('file:///sdcard/htdocs/translate/db/project.json').then(function(response) {
+		$http.get('db/project.json').then(function(response) {
 			$scope.srt = response.data;
 		}, 
 		function(){
